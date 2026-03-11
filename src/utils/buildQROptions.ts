@@ -46,7 +46,8 @@ export function buildQROptions(settings: QRSettings, data: string): Options {
     type: 'canvas',
     data,
     image: logoDataUrl || undefined,
-    margin,
+    // margin is stored as a percentage (0–50); convert to pixels for the library
+    margin: Math.round((margin / 100) * size),
     qrOptions: { errorCorrectionLevel: errorCorrection },
     imageOptions: {
       saveAsBlob: true,

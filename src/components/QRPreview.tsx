@@ -26,13 +26,16 @@ export function QRPreview({ settings }: Props) {
   });
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      {/* Canvas container */}
-      <div
-        className="rounded-2xl overflow-hidden shadow-xl border border-gray-200 dark:border-gray-700"
-        style={{ lineHeight: 0 }}
-        ref={containerRef}
-      />
+    <div className="flex flex-col items-center gap-4 w-full">
+      {/* Canvas container — scales down to fit the panel, never overflows.
+          The actual export size is controlled by settings.size; this is display only. */}
+      <div className="w-full flex justify-center">
+        <div
+          ref={containerRef}
+          className="rounded-2xl overflow-hidden shadow-xl border border-gray-200 dark:border-gray-700 [&_canvas]:!max-w-full [&_canvas]:!h-auto [&_svg]:!max-w-full [&_svg]:!h-auto"
+          style={{ lineHeight: 0, maxWidth: '100%' }}
+        />
+      </div>
 
       {/* Warnings */}
       {warnings.length > 0 && (

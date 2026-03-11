@@ -7,15 +7,15 @@ import { ErrorPage } from './pages/ErrorPage';
 
 const THEME_KEY = 'qr-theme';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark';
 
 function getInitialTheme(): Theme {
-  return (localStorage.getItem(THEME_KEY) as Theme) || 'system';
+  return (localStorage.getItem(THEME_KEY) as Theme) || 'light';
 }
 
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
-  if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (theme === 'dark') {
     root.classList.add('dark');
   } else {
     root.classList.remove('dark');
@@ -23,16 +23,8 @@ function applyTheme(theme: Theme) {
 }
 
 function Navbar({ theme, setTheme }: { theme: Theme; setTheme: (t: Theme) => void }) {
-  function toggle() {
-    // Cycle: system → light → dark → system
-    const next: Theme = theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system';
-    setTheme(next);
-  }
-
-  const icon =
-    theme === 'dark' ? <Moon className="w-4 h-4" /> : theme === 'light' ? <Sun className="w-4 h-4" /> : <span className="text-xs font-bold">A</span>;
-
-  const label = `Theme: ${theme}. Click to cycle.`;
+  const isDark = theme === 'dark';
+  const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
 
   return (
     <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-0 z-20">
@@ -42,12 +34,12 @@ function Navbar({ theme, setTheme }: { theme: Theme; setTheme: (t: Theme) => voi
           QR Generator
         </a>
         <button
-          onClick={toggle}
+          onClick={() => setTheme(isDark ? 'light' : 'dark')}
           aria-label={label}
           title={label}
           className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
         >
-          {icon}
+          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
       </div>
     </header>
@@ -65,11 +57,6 @@ export default function App() {
 
   useEffect(() => {
     applyTheme(theme);
-    // Also listen to system pref changes when in 'system' mode
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = () => { if (theme === 'system') applyTheme('system'); };
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
   }, [theme]);
 
   return (

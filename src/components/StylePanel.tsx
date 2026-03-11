@@ -168,7 +168,7 @@ export function StylePanel({ settings, onChange }: Props) {
           />
         </div>
         <div>
-          <label className={labelCls}>Margin: {settings.margin}px</label>
+          <label className={labelCls}>Margin: {settings.margin}%</label>
           <input
             type="range" min={0} max={50} step={1}
             value={settings.margin}

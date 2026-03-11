@@ -3,7 +3,7 @@ import type { QRSettings } from '../types';
 export const DEFAULT_SETTINGS: QRSettings = {
   content: { type: 'url', url: 'https://example.com' },
   size: 400,
-  margin: 10,
+  margin: 4, // percentage (0–50%)
   errorCorrection: 'M',
   dotsColor: '#000000',
   dotsType: 'square',

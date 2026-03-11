@@ -155,18 +155,9 @@ export function StylePanel({ settings, onChange }: Props) {
 
   return (
     <div className="space-y-4">
-      {/* Size & margin */}
+      {/* Margin */}
       <div className={sectionCls}>
         <p className={sectionTitle}>Canvas</p>
-        <div>
-          <label className={labelCls}>Size: {settings.size}px</label>
-          <input
-            type="range" min={128} max={1024} step={8}
-            value={settings.size}
-            onChange={(e) => onChange({ size: Number(e.target.value) })}
-            className="w-full accent-indigo-600"
-          />
-        </div>
         <div>
           <label className={labelCls}>Margin: {settings.margin}%</label>
           <input

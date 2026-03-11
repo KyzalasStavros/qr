@@ -1,10 +1,11 @@
 import type { Options } from 'qr-code-styling';
 import type { QRSettings } from '../types';
 
+const EXPORT_SIZE = 1024;
+
 /** Build QRCodeStyling Options from app settings. Used by the hook and export panel. */
 export function buildQROptions(settings: QRSettings, data: string): Options {
   const {
-    size,
     margin,
     errorCorrection,
     dotsColor,
@@ -41,13 +42,13 @@ export function buildQROptions(settings: QRSettings, data: string): Options {
       : undefined;
 
   return {
-    width: size,
-    height: size,
+    width: EXPORT_SIZE,
+    height: EXPORT_SIZE,
     type: 'canvas',
     data,
     image: logoDataUrl || undefined,
     // margin is stored as a percentage (0–50); convert to pixels for the library
-    margin: Math.round((margin / 100) * size),
+    margin: Math.round((margin / 100) * EXPORT_SIZE),
     qrOptions: { errorCorrectionLevel: errorCorrection },
     imageOptions: {
       saveAsBlob: true,

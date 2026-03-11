@@ -103,7 +103,6 @@ export type QRContent =
 // ── Full QR settings ───────────────────────────────────────────────────────
 export interface QRSettings {
   content: QRContent;
-  size: number;
   margin: number;
   errorCorrection: ErrorCorrectionLevel;
   dotsColor: string;

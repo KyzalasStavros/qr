@@ -41,7 +41,19 @@ export function useQRCode(
         // never renders a blank center hole while it fetches the image async.
         // For data URLs this resolves in <1 ms (already in memory).
         const img = new Image();
-        img.onload = createInstance;
+        img.onload = () => {
+          createInstance();
+          // qr-code-styling creates its own Image internally and composites async.
+          // By the time our Image fires onload the library's internal decode is also
+          // done (same data URL, same browser decode pipeline). A single update()
+          // call right after forces a synchronous re-composite with the cached bitmap.
+          setTimeout(() => {
+            if (!cancelled && qrRef.current) {
+              console.debug('[useQRCode] logo loaded — forcing update to flush composite');
+              qrRef.current.update(buildQROptions(settings, data));
+            }
+          }, 50);
+        };
         img.onerror = createInstance; // still render QR if image somehow fails
         img.src = settings.logoDataUrl;
       } else {

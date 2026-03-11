@@ -1,5 +1,13 @@
 import clsx from 'clsx';
+import { Tooltip } from './Tooltip';
 import type { AppMode } from '../types';
+
+const MODE_INFO: Record<AppMode, string> = {
+  static:
+    'Static QR — the full content (URL, text, contact, etc.) is encoded directly in the QR code. No server required. Once printed, the destination cannot be changed.',
+  dynamic:
+    'Dynamic QR — the QR code encodes a short redirect URL on this site (e.g. /go/my-link). The destination can be changed later by editing redirects.json and redeploying. Useful for printed materials where the target URL may change.',
+};
 
 interface Props {
   mode: AppMode;
@@ -27,6 +35,7 @@ export function ModeToggle({ mode, onChange }: Props) {
           </button>
         ))}
       </div>
+      <Tooltip content={MODE_INFO[mode]} position="bottom" />
       {mode === 'dynamic' && (
         <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
           Requires redeploy to change destination

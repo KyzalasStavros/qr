@@ -15,8 +15,23 @@ export type DotType =
   | 'square'
   | 'extra-rounded';
 
-export type CornerSquareType = 'dot' | 'square' | 'extra-rounded';
-export type CornerDotType = 'dot' | 'square';
+export type CornerSquareType =
+  | 'dot'
+  | 'square'
+  | 'extra-rounded'
+  | 'rounded'
+  | 'dots'
+  | 'classy'
+  | 'classy-rounded';
+
+export type CornerDotType =
+  | 'dot'
+  | 'square'
+  | 'extra-rounded'
+  | 'rounded'
+  | 'dots'
+  | 'classy'
+  | 'classy-rounded';
 export type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
 export type GradientType = 'linear' | 'radial';
 export type AppMode = 'static' | 'dynamic';

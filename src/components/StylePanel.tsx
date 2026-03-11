@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { Upload, X } from 'lucide-react';
+import { Tooltip } from './Tooltip';
 import type {
   QRSettings,
   DotType,
@@ -17,8 +18,8 @@ const sectionCls = 'space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700
 const sectionTitle = 'text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400';
 
 const DOT_TYPES: DotType[] = ['square', 'rounded', 'dots', 'classy', 'classy-rounded', 'extra-rounded'];
-const CORNER_SQUARE_TYPES: CornerSquareType[] = ['square', 'dot', 'extra-rounded'];
-const CORNER_DOT_TYPES: CornerDotType[] = ['square', 'dot'];
+const CORNER_SQUARE_TYPES: CornerSquareType[] = ['square', 'dot', 'extra-rounded', 'rounded', 'dots', 'classy', 'classy-rounded'];
+const CORNER_DOT_TYPES: CornerDotType[] = ['square', 'dot', 'extra-rounded', 'rounded', 'dots', 'classy', 'classy-rounded'];
 const EC_LEVELS: ErrorCorrectionLevel[] = ['L', 'M', 'Q', 'H'];
 const EC_LABELS: Record<ErrorCorrectionLevel, string> = {
   L: 'L – Low (7%)',
@@ -176,7 +177,23 @@ export function StylePanel({ settings, onChange }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="ec-level" className={labelCls}>Error correction</label>
+          <div className="flex items-center gap-1.5 mb-1">
+            <label htmlFor="ec-level" className="text-sm font-medium text-gray-700 dark:text-gray-300">Error correction</label>
+            <Tooltip
+              content={
+                <>
+                  <p className="font-semibold mb-1">Error correction level</p>
+                  <p className="mb-1">Controls how much of the QR code can be damaged or obscured and still scan correctly.</p>
+                  <ul className="space-y-0.5">
+                    <li><strong>L (7%)</strong> — smallest code, least robust</li>
+                    <li><strong>M (15%)</strong> — good default for clean prints</li>
+                    <li><strong>Q (25%)</strong> — better for slightly worn surfaces</li>
+                    <li><strong>H (30%)</strong> — required when adding a logo</li>
+                  </ul>
+                </>
+              }
+            />
+          </div>
           <select
             id="ec-level"
             className={inputCls}
@@ -190,9 +207,18 @@ export function StylePanel({ settings, onChange }: Props) {
         </div>
       </div>
 
-      {/* Dots */}
       <div className={sectionCls}>
-        <p className={sectionTitle}>Dots</p>
+        <div className="flex items-center gap-1.5">
+          <p className={sectionTitle}>Dots</p>
+          <Tooltip
+            content={
+              <>
+                <p className="font-semibold mb-1">Dot style</p>
+                <p>Controls the shape of every data module in the QR code. More decorative shapes still scan correctly — just ensure good contrast.</p>
+              </>
+            }
+          />
+        </div>
         <div>
           <label className={labelCls}>Style</label>
           <div className="flex flex-wrap gap-2">
@@ -237,9 +263,13 @@ export function StylePanel({ settings, onChange }: Props) {
         />
       </div>
 
-      {/* Background */}
       <div className={sectionCls}>
-        <p className={sectionTitle}>Background</p>
+        <div className="flex items-center gap-1.5">
+          <p className={sectionTitle}>Background</p>
+          <Tooltip
+            content="Controls the QR code background. Use transparent for PNGs you want to overlay on coloured surfaces. Transparency is not supported in SVG exports."
+          />
+        </div>
         <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
           <input
             type="checkbox"
@@ -277,9 +307,18 @@ export function StylePanel({ settings, onChange }: Props) {
         )}
       </div>
 
-      {/* Corners */}
       <div className={sectionCls}>
-        <p className={sectionTitle}>Corner squares</p>
+        <div className="flex items-center gap-1.5">
+          <p className={sectionTitle}>Corner squares</p>
+          <Tooltip
+            content={
+              <>
+                <p className="font-semibold mb-1">Corner squares</p>
+                <p>The three large squares in the corners of the QR code. Scanners use them to locate and orient the code.</p>
+              </>
+            }
+          />
+        </div>
         <div>
           <label className={labelCls}>Style</label>
           <div className="flex flex-wrap gap-2">
@@ -316,7 +355,17 @@ export function StylePanel({ settings, onChange }: Props) {
           </div>
         </div>
 
-        <p className={sectionTitle + ' mt-3'}>Corner dots</p>
+        <div className="flex items-center gap-1.5 mt-3">
+          <p className={sectionTitle}>Corner dots</p>
+          <Tooltip
+            content={
+              <>
+                <p className="font-semibold mb-1">Corner dots</p>
+                <p>The small square or dot inside each corner square. Independent style control lets you create contrast between the inner and outer parts of the corner markers.</p>
+              </>
+            }
+          />
+        </div>
         <div>
           <label className={labelCls}>Style</label>
           <div className="flex flex-wrap gap-2">
@@ -354,9 +403,22 @@ export function StylePanel({ settings, onChange }: Props) {
         </div>
       </div>
 
-      {/* Logo */}
       <div className={sectionCls}>
-        <p className={sectionTitle}>Logo</p>
+        <div className="flex items-center gap-1.5">
+          <p className={sectionTitle}>Logo</p>
+          <Tooltip
+            content={
+              <>
+                <p className="font-semibold mb-1">Logo overlay</p>
+                <ul className="space-y-1">
+                  <li>• Error correction is automatically set to <strong>H</strong> when a logo is added, since the logo covers part of the code.</li>
+                  <li>• Keep logo size below 30% for best scan reliability.</li>
+                  <li>• Logos appear in both PNG and SVG exports.</li>
+                </ul>
+              </>
+            }
+          />
+        </div>
         {settings.logoDataUrl ? (
           <div className="space-y-2">
             <div className="flex items-center gap-3">

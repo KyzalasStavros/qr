@@ -161,7 +161,7 @@ export function StylePanel({ settings, onChange }: Props) {
         <div>
           <label className={labelCls}>Margin: {settings.margin}%</label>
           <input
-            type="range" min={0} max={50} step={1}
+            type="range" min={0} max={10} step={1}
             value={settings.margin}
             onChange={(e) => onChange({ margin: Number(e.target.value) })}
             className="w-full accent-indigo-600"

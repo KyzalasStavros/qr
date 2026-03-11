@@ -25,11 +25,30 @@ export function useQRCode(
 
     // Recreate instance when: first mount OR logo changed (avoids async white-flash)
     if (!mountedRef.current || logoChanged) {
-      // Clear any existing canvas/svg child appended by a prior instance
-      containerRef.current.innerHTML = '';
-      qrRef.current = new QRCodeStyling(buildQROptions(settings, data));
-      qrRef.current.append(containerRef.current);
-      mountedRef.current = true;
+      let cancelled = false;
+
+      const createInstance = () => {
+        if (cancelled || !containerRef.current) return;
+        // Clear any existing canvas/svg child appended by a prior instance
+        containerRef.current.innerHTML = '';
+        qrRef.current = new QRCodeStyling(buildQROptions(settings, data));
+        qrRef.current.append(containerRef.current);
+        mountedRef.current = true;
+      };
+
+      if (settings.logoDataUrl) {
+        // Preload the image before creating the instance so qr-code-styling
+        // never renders a blank center hole while it fetches the image async.
+        // For data URLs this resolves in <1 ms (already in memory).
+        const img = new Image();
+        img.onload = createInstance;
+        img.onerror = createInstance; // still render QR if image somehow fails
+        img.src = settings.logoDataUrl;
+      } else {
+        createInstance();
+      }
+
+      return () => { cancelled = true; };
     } else {
       qrRef.current?.update(buildQROptions(settings, data));
     }
